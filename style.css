@@ -1,0 +1,86 @@
+body {
+    background-color: black;
+    
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f68426; /*สี background ของตัวอักษร เเถบบนสุด*/
+    
+}
+
+li {
+    float: left;
+}
+
+li a {
+  display: block;  
+  color: #ffffff; /*สี ของตัวอักษร เเถบบนสุด*/
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;  
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.0); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+}
+
+li a:hover {
+    background-color: #33333371; /*สีหลังจากที่เม้าไปถูกที่block*/
+}
+
+img {
+    width: 30px;   /* กว้าง */
+    height: 20px;   /* สูง */
+    margin-left: 10px; /* ระยะห่างด้านซ้ายของรูปภาพ */
+   
+}
+
+.login-box {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 20px;
+    width: 300px;
+    margin: 0 auto; /* จัดกล่องกลางหน้าจอ */
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้กล่อง */
+    
+}
+
+.login-box h2 {
+    font-size: 24px;
+}
+
+.login-box form {
+    margin-top: 20px;
+}
+
+.login-box label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-box button {
+    background-color: #ff6a00;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-box button:hover {
+    background-color: #a4470e;
+}
+
+

@@ -1,0 +1,81 @@
+body {
+    background-color: black;
+    
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f68426; /*สี background ของตัวอักษร เเถบบนสุด*/
+    
+}
+
+li {
+    float: left;
+}
+
+li a {
+  display: block;  
+  color: #ffffff; /*สี ของตัวอักษร เเถบบนสุด*/
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;  
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.0); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+}
+
+li a:hover {
+    background-color: #33333371; /*สีหลังจากที่เม้าไปถูกที่block*/
+}
+
+img {
+    width: 30px;   /* กว้าง */
+    height: 20px;   /* สูง */
+    margin-left: 10px; /* ระยะห่างด้านซ้ายของรูปภาพ */
+   
+}
+
+h1 {
+    color: #ffffff;
+    padding: 14px 16px;
+    border: 2px solid #3d3d3d; /*สีของกรอบ Home */
+    padding: 10px;
+    background-color: #3d3d3d; /* สีพื้นหลังในกรอบ */
+    position: relative;
+    top: -20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+} 
+
+.info-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 50px;
+    width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.info-box h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+.info-box p {
+    font-size: 16px;
+    color: #666;
+}
+
+.info-box ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.info-box li {
+    font-size: 14px;
+    color: #888;
+}
+
+
+
