@@ -1,0 +1,54 @@
+ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: center; /* จัดให้ข้อความอยู่ตรงกลางแนวนอน */
+}
+
+ul > button {
+    background-color: #939393;
+    color: #ffffff;
+    font-size: 32px; /* กำหนดขนาดตัวอักษรในปุ่ม */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 5px; /* เพิ่มขอบระหว่างปุ่ม */
+    width: 300px; /* กำหนดความกว้างของปุ่ม */
+    height: 86px; /* กำหนดความสูงของปุ่ม */
+}
+
+ul > button:hover {
+    background-color: #3b3838d5;
+}
+
+/* ขยับปุ่ม "Home" ไปอยู่บนบรรทัดแรก */
+ul > button:nth-child(1) {
+    margin-right: 30px; /* ระยะห่างด้านขวาของปุ่ม "Home" */    
+}
+
+ul > button:nth-child(2) {
+    margin-right: 30px; /* ระยะห่างด้านขวาของปุ่ม "Selection" */
+}
+
+ul > button:nth-child(3) {
+    margin-right: 30px; /* ระยะห่างด้านขวาของปุ่ม "Head/ink" */
+}
+ul > button:nth-child(4) {
+    margin-right: 30px; /* ระยะห่างด้านขวาของปุ่ม "Condition" */
+}
+
+ul > button:nth-child(5) {
+    margin-right: 30px; /* ระยะห่างด้านขวาของปุ่ม "Edit" */
+}
+
+ul > button:nth-child(6) {
+    margin-right: 50px; /* ระยะห่างด้านขวาของปุ่ม "Unit" */
+}
+ul > button:nth-child(7) {
+    margin-right: 30px; /* ระยะห่างด้านขวาของปุ่ม "Work log" */
+}
+ul > button:nth-child(8) {
+    margin-right: 30px; /* ระยะห่างด้านขวาของปุ่ม "Alarm code" */
+}
+ul > button:nth-child(9) {
+    margin-right: 30px; /* ระยะห่างด้านขวาของปุ่ม "Measurement log" */
+}
