@@ -23,7 +23,7 @@ connection.connect((err) => {
 app.use(express.static('public'));
 
 app.get('/data', (req, res) => {
-    connection.query('SELECT first_name, last_name FROM Nume LIMIT 1', (err, results) => {
+    connection.query('SELECT Date, Time FROM selectmode LIMIT 2', (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -31,8 +31,8 @@ app.get('/data', (req, res) => {
         }
 
         const data = results.map(row => ({
-            first_name: row.first_name,
-            last_name: row.last_name,
+            Date: row.Date,
+            Time: row.Time,
         }));
 
         res.json(data);
