@@ -63,8 +63,8 @@
         <table>
             <thead>
                 <tr>
-                   <th>first_name</th>
-                   <th>last_name</th>
+                   <th>Date</th>
+                   <th>Time</th>
                 </tr>
             </thead>
               
@@ -81,14 +81,14 @@
               .then(data => {
                 data.forEach(item => {
                   const row = document.createElement('tr');
-                  const first_nameCell = document.createElement('td');
-                  const last_nameCell = document.createElement('td');
-                          
-                  first_nameCell.textContent = item.first_name;
-                  last_nameCell.textContent = item.last_name;
-                          
-                  row.appendChild(first_nameCell);
-                  row.appendChild(last_nameCell);
+                  const DateCell = document.createElement('td');
+                  const TimeCell = document.createElement('td');
+                                            
+                  DateCell.textContent = item.Date;
+                  TimeCell.textContent = item.Time;
+                         
+                  row.appendChild(DateCell);
+                  row.appendChild(TimeCell);
                   
                   dataBody.appendChild(row);
                 });
