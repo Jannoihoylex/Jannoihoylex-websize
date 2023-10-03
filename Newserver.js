@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require("mysql2")
+const mysql = require("mysql2");
 
 const app = express();
 
@@ -11,12 +11,19 @@ const db_config = {
 };
 
 const connection = mysql.createConnection(db_config);
-app.use(express.static('public')); // เพิ่ม middleware เพื่อให้ Express สามารถเข้าถึงไฟล์ในโฟลเดอร์ 'public' ได้
 
+connection.connect((err) => {
+    if (err) {
+        console.error('Error connecting to MySQL:', err);
+        return;
+    }
+    console.log('Connected to MySQL database');
+});
 
+app.use(express.static('public'));
 
 app.get('/data', (req, res) => {
-    connection.query('SELECT first_name, last_name FROM Nume', (err, results) => {
+    connection.query('SELECT first_name, last_name FROM Nume LIMIT 1', (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -32,13 +39,12 @@ app.get('/data', (req, res) => {
     });
 });
 
-app.get('/Home.html', (req, res) => {
-    res.sendFile(__dirname + '/public/Home.html');
-});
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/Newhome.html');
+}); // ตรวจสอบว่ามี ; ต่อท้ายคำสั่งนี้
 
+const port = 8086;
 
-const port = 8081;
-
-app.listen(8081, () => {
-    console.log('Server is running on port 8081');
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
