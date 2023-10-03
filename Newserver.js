@@ -8,6 +8,7 @@ const db_config = {
     user: 'JC2',
     password: 'JC2#14#client',
     database: 'Mysqltest'
+    
 };
 
 const connection = mysql.createConnection(db_config);
@@ -39,7 +40,7 @@ app.get('/data', (req, res) => {
     });
 });
 
-app.get('/', (req, res) => {
+app.get('/MuMu/Newhome.html', (req, res) => {
     res.sendFile(__dirname + '/Newhome.html');
 }); // ตรวจสอบว่ามี ; ต่อท้ายคำสั่งนี้
 
