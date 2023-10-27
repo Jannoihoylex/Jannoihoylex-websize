@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Selection page</title>
+   
+</head>
+
+<body>
+   
+    <div class="info-box">  
+        <table>
+            <thead>
+                <tr>
+                   <th></th>
+                   <th></th>
+                </tr>
+            </thead>
+          
+            <tbody id="data-body">
+            <!-- ข้อมูลจะถูกแทรกที่นี่ -->
+            </tbody>
+        </table>
+    </div>
+        <script>
+            const dataBody = document.getElementById('data-body');
+        
+            fetch('/data')
+              .then(response => response.json())
+              .then(data => {
+                
+                  const selectmode = data.selectmode;
+                  
+                  const selectmodeRow = document.createElement('tr');                  
+                  const selectmodeNumberModuleCell = document.createElement('td');
+                  const selectmodeNameModuleCell = document.createElement('td');
+                
+                  selectmodeNumberModuleCell.textContent = selectmode.NumberModule + " : " + selectmode.NameModule;
+
+                  selectmodeRow.appendChild(selectmodeNumberModuleCell);
+                  selectmodeRow.appendChild(selectmodeNameModuleCell);
+
+                 
+                  dataBody.appendChild(selectmodeRow);
+                  
+              });
+        </script>
+
+        <div id="myTableContainer" style="overflow: auto; height: 230px; margin-top: 80px;  margin-left: 250px; font-size: 25px;  padding: 10px; width: 700px; background-color: #f0f0f0;">
+            <table>
+                <thead>
+                    <tr>
+                       <th>NumberModule</th>
+                       <th>NameModule</th>                       
+                    </tr>
+                </thead>
+                  
+                <tbody id="dataMimi">
+                  <!-- ข้อมูลจะถูกแทรกที่นี่ -->
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            const datamimi = document.getElementById('dataMimi');
+        
+            fetch('/dataCondiSelect')
+              .then(response => response.json())
+              .then(data => {
+                data.forEach(item => {
+                  const row = document.createElement('tr');
+                 
+                  const NumberModuleCell = document.createElement('td');
+                  const NameModuleCell = document.createElement('td');
+                  
+                          
+               
+                  NumberModuleCell.textContent = item.NumberModule;
+                  NameModuleCell.textContent = item.NameModule;
+                 
+                          
+                
+                  row.appendChild(NumberModuleCell);
+                  row.appendChild(NameModuleCell);
+                  
+                  
+                  dataMimi.appendChild(row);
+                });
+              });
+        </script>
+
+      
+ 
+  
+  
+        
+
+      <button id="backButton">Back</button>
+      <script>
+        document.getElementById('backButton').addEventListener('click', () => {
+          window.location.href = '/MuMu/Newhome.html';
+        });
+      </script>
+
+      <form id="actionForm">
+        <input type="number" id="numericInput" name="numericInput" min="0" max="999" required>
+        <button type="submit" id="submitButton">submit</button>
+      </form>
+        <script>
+            // ใช้ JavaScript เพื่อตั้งค่า ID ของปุ่ม "Confirm"
+            document.querySelector('#submitButton').id = 'submitButton';
+        </script>
+    
+
+      <script>
+        document.getElementById('actionForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // ป้องกันความเป็นประจักษ์ของแบบฟอร์ม
+        
+            const numericInputValue = document.getElementById('numericInput').value;
+        
+            // แปลงตัวเลขที่คุณเลือกเป็นรูปแบบที่ต้องการ
+            const formattedActionValue = `SMN:0:1:${numericInputValue}:`;
+        
+            // ส่งข้อมูลไปยังเซิร์ฟเวอร์ Express
+            fetch('/insertAction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ actionValue: formattedActionValue }), // ส่งข้อมูลที่แปลงแล้ว
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data inserted successfully:', data);
+                // เพิ่มการปรับปรุงหน้าเว็บหรือการแจ้งเตือนผู้ใช้ที่คุณต้องการทำ
+            })
+            .catch(error => {
+                console.error('Error inserting data:', error);
+                // จัดการข้อผิดพลาดและแจ้งเตือนผู้ใช้เมื่อมีปัญหา
+            });
+        });
+        
+
+    </script>
+  
+    
+        
+    </body>
+
+</html>
