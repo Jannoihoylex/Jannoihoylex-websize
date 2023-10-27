@@ -88,6 +88,19 @@
                 });
               });
         </script>
+        <script>
+            fetch('http://localhost:8080/data') // เปลี่ยน URL เป็น URL ของแหล่งข้อมูลของคุณ
+    .then(response => response.json())
+    .then(data => {
+      // ทำอะไรกับข้อมูลที่คุณได้รับ เช่นแสดงบนหน้าเว็บ
+      const element = document.getElementById('data-container'); // ตั้ง ID ของ HTML element ที่จะแสดงข้อมูล
+      element.textContent = JSON.stringify(data);
+    })
+    .catch(error => {
+      console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
+    });
+
+        </script>
 
       
  
