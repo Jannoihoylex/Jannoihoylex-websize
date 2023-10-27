@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 
@@ -7,64 +5,24 @@
     <title>Home page</title>
     
    
-    
+   
 </head>
 
 <body>
     <header>
-        <img id="headerImage" src="https://complete.co.th/wp-content/uploads/2023/07/LOGO-COMPLETE-MARK-200.png"
+        <img id="headerImage" src="https://complete.co.th/wp-content/uploads/2021/08/Asset-1.png"
              alt="รูปภาพของคุณ">
     </header>
 
-    <ul>
-        <li>
-            <a href="./Home.html" id="homelink">
-                Home
-            </a>
-        </li>
-        <li>
-            <a href="./Selection.html">
-                Selection
-            </a>
-        </li>
-        <li>
-            <a href="./Headink.html">
-                Head/ink
-            </a>
-        </li>
-        <li>
-            <a href="./Condition.html">
-                Condition
-            </a>
-        </li>
-        <li>
-            <a href="./Edit.html">
-                Edit
-            </a>
-        </li>
-        <li>
-            <a href="./Unit.html">
-                Unit
-            </a>
-        </li>
-        <li>
-            <a href="./Measurement.html">
-                Measurement log
-            </a>
-        </li>
-        <li>
-            <a href="./Other.html">
-                Other
-            </a>
-        </li>
-    </ul>
+    
     <h1>HOME</h1>
     <div class="info-box">
         <table>
             <thead>
                 <tr>
-                   <th>Date</th>
-                   <th>Time</th>
+                   <th></th>
+                   <th></th>
+                   
                 </tr>
             </thead>
               
@@ -72,84 +30,537 @@
               <!-- ข้อมูลจะถูกแทรกที่นี่ -->
             </tbody>
         </table>
-
-        <script>
+   <script>
             const dataBody = document.getElementById('data-body');
-        
+            
             fetch('/data')
               .then(response => response.json())
               .then(data => {
-                data.forEach(item => {
-                  const row = document.createElement('tr');
-                  const DateCell = document.createElement('td');
-                  const TimeCell = document.createElement('td');
-                                            
-                  DateCell.textContent = item.Date;
-                  TimeCell.textContent = item.Time;
-                         
-                  row.appendChild(DateCell);
-                  row.appendChild(TimeCell);
+                
+                  const selectmode = data.selectmode;
                   
-                  dataBody.appendChild(row);
-                });
+                                   
+                  const selectmodeRow = document.createElement('tr');
+                  const selectmodeNumberModuleCell = document.createElement('td');
+                  const selectmodeNameModuleCell = document.createElement('td');
+
+                  selectmodeNumberModuleCell.textContent = selectmode.NumberModule + " : " + selectmode.NameModule;
+
+                  selectmodeRow.appendChild(selectmodeNumberModuleCell);
+                  selectmodeRow.appendChild(selectmodeNameModuleCell);
+
+                 
+                  dataBody.appendChild(selectmodeRow);
               });
-        </script> 
-        
+        </script>
+        <button id="runButton" class="custom-button" onclick="runFunction()">Run</button>
+        <div id="outputRun"></div> 
+
+        <button id="stopButton" class="custom-button" onclick="stopFunction()">Stop</button>
+        <div id="outputStop"></div> 
+
+        <button id="manualButton" class="custom-button" onclick="manualFunction()">Manual Printing</button>
+        <div id="outputManual"></div>  
         <script>
-                    const express = require('express');
-                    const mysql = require("mysql2");
-
-                    const app = express();
-
-                    const db_config = {
-                        host: '172.18.40.83',
-                        user: 'JC2',
-                        password: 'JC2#14#client',
-                        database: 'Mysqltest'
-                        
-                    };
-
-                    const connection = mysql.createConnection(db_config);
-
-                    connection.connect((err) => {
-                        if (err) {
-                            console.error('Error connecting to MySQL:', err);
-                            return;
+            function runFunction() {
+                // ดึงข้อมูล "Running_control" จากตาราง "statusrunning"
+                fetch('/dataStatus')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0 && data[0].Running_control === "Stop") {
+                            // สามารถกดปุ่ม "Run" ได้
+                            x = 1; // เปลี่ยนค่า x เมื่อกดปุ่ม "Run"
+                            /*var outputDivRun = document.getElementById("outputRun");
+                            var outputDivStop = document.getElementById("outputStop");
+                            outputDivRun.innerHTML = " " + x;
+                            outputDivStop.innerHTML = " " + x; */
+            
+                            // ทำการส่งคำขอ POST เพื่อเก็บค่า 1 ในคอลัมน์ "action"
+                            fetch('/insertAction', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ actionValue: "SRC:0:1:1:" })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // ดำเนินการเมื่อการอัปเดตเสร็จสมบูรณ์
+                            });
+            
+                            // รอ 16 วินาทีก่อนที่จะเปลี่ยนค่า x และให้ "Stop" ทำงานได้อีกครั้ง
+                            setTimeout(function() {
+                                canRun = false;
+                            }, 16000); // 16,000 มิลลิวินาที คือ 16 วินาที
+                        } else {
+                            // ถ้าไม่สามารถกด "Run" ให้แสดงข้อความหรือทำอย่างอื่นตามที่คุณต้องการ
+                            alert("ไม่สามารถกด 'Run' ได้ เนื่องจาก 'Running_control' มีค่าเป็น 'Run'");
                         }
-                        console.log('Connected to MySQL database');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching status data:', error);
                     });
-
-                    app.use(express.static('public'));
-
-                    app.get('/data', (req, res) => {
-                        connection.query('SELECT Date, Time FROM selectmode LIMIT 2', (err, results) => {
-                            if (err) {
-                                console.error(err);
-                                res.status(500).json({ error: 'Internal Server Error' });
-                                return;
-                            }
-
-                            const data = results.map(row => ({
-                                Date: row.Date,
-                                Time: row.Time,
-                            }));
-
-                            res.json(data);
-                        });
+            }
+            
+            function stopFunction() {
+                // ดึงข้อมูล "Running_control" จากตาราง "statusrunning"
+                fetch('/dataStatus')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0 && data[0].Running_control === "Run") {
+                            // สามารถกดปุ่ม "Stop" ได้
+                            x = 0; // เปลี่ยนค่า x เมื่อกดปุ่ม "Stop"
+                            /*var outputDivRun = document.getElementById("outputRun");
+                            var outputDivStop = document.getElementById("outputStop");
+                            outputDivRun.innerHTML = " " + x;
+                            outputDivStop.innerHTML = " " + x; */
+            
+                            // ทำการส่งคำขอ POST เพื่อเก็บค่า 0 ในคอลัมน์ "action"
+                            fetch('/insertAction', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ actionValue: "SRC:0:1:0:" })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // ดำเนินการเมื่อการอัปเดตเสร็จสมบูรณ์
+                            });
+            
+                            // แสดงค่า 0 บนหน้าเว็บ
+                            var outputAction = document.getElementById("outputAction");
+                            outputAction.innerHTML = "stop";
+                        } else {
+                            // ถ้าไม่สามารถกด "Stop" ให้แสดงข้อความหรือทำอย่างอื่นตามที่คุณต้องการ
+                            alert("ไม่สามารถกด 'Stop' ได้ เนื่องจาก 'Running_control' มีค่าเป็น 'Stop'");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching status data:', error);
                     });
+            }
+    
+        </script>
+    
+       
+    
+        <script>
+            function manualFunction() {
+                x = 1; // เปลี่ยนค่า x เมื่อกดปุ่ม "Manual Printing"
+                /*var outputDivRun = document.getElementById("outputRun");
+                var outputDivStop = document.getElementById("outputStop");
+                var outputDivManual = document.getElementById("outputManual")
+                outputDivRun.innerHTML = " " + x;
+                outputDivStop.innerHTML = " " + x;
+                outputDivManual.innerHTML = " " + x; */
+            
+                // ทำการส่งคำขอ POST เพื่อเก็บค่า 1 ในคอลัมน์ "action"
+                fetch('/insertAction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ actionValue: "SRP:0:1:" })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // ดำเนินการเมื่อการอัปเดตเสร็จสมบูรณ์
+                });
+            
+                // แสดงค่า 1 บนหน้าเว็บ
+                var outputAction = document.getElementById("outputAction");
+                outputAction.innerHTML = "";
+            }
+            
+        </script> 
+    
+                <!--    <div id="outputManual"></div>
+                <div id="outputRun"></div>
+                <div id="outputStop"></div> -->
+                <div id="outputAction"></div>
+    
+    
+                
+                
+    
+                <script>
+                // สร้างฟังก์ชันสำหรับดึงข้อมูลแบบเรียลไทม์
+                function fetchRealTimeData() {
+                    // สร้างการเรียกข้อมูล
+    
+          fetch('http://localhost:8085/data')
+              .then(response => response.json())
+              .then(data => {
+                  const realTimeDataList = document.getElementById('realTimeDataList');
+                  // เคลียร์รายการข้อมูลเก่า
+                  realTimeDataList.innerHTML = '';
+                  // สร้างรายการข้อมูลใหม่
+                  data.forEach(item => {
+                      const listItem = document.createElement('li');
+                      listItem.textContent = `ID: ${item.id}, Timestamp: ${item.timestamp}, Action: ${item.action}`;
+                      realTimeDataList.appendChild(listItem);
+                  });
+              })
+              .catch(error => {
+                  console.error('Error fetching real-time data:', error);
+              });
+        }
+    
+            // สร้างฟังก์ชันสำหรับดึงข้อมูลแบบเรียลไทม์ทุก 0.5 วินาที
+            setInterval(fetchRealTimeData, 500); // 500 มิลลิวินาที (0.5 วินาที)
+            // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลเริ่มต้น
+            fetchRealTimeData();
+        </script>
+         
+         
 
-                    app.get('/MuMu/Newhome.html', (req, res) => {
-                        res.sendFile(__dirname + '/Newhome.html');
-                    }); // ตรวจสอบว่ามี ; ต่อท้ายคำสั่งนี้
+      <button id="SelectButton" class="custom-button" onclick="navigateToSelection()">Selection</button>
+      <script>
+        function navigateToSelection() {
+        window.location.href = '/MuMu/Selection.html'; // กำหนด URL ที่ต้องการไป
+      }
+      </script>
 
-                    const port = 8086;
+      <button id="ConditionButton" class="custom-button" onclick="navigateToCondition()">Condition</button>
+      <script>
+        function navigateToCondition() {
+        window.location.href = '/MuMu/C1condition.html'; // กำหนด URL ที่ต้องการไป
+      }
+      </script>
 
-                    app.listen(port, () => {
-                        console.log(`Server is running on port ${port}`);
-                    });
-        
-        </script>    
+      <button id="EditButton" class="custom-button" onclick="navigateToEdit()">Edit current message value</button>
+      <script>
+        function navigateToEdit() {
+        window.location.href = '/MuMu/E1edit.html'; // กำหนด URL ที่ต้องการไป
+      }
+      </script>
+
+      <button id="worklog1Button" class="custom-button" onclick="navigateToworklog1()">Work log</button>
+      <script>
+        function navigateToworklog1() {
+        window.location.href = '/MuMu/W1worklog.html'; // กำหนด URL ที่ต้องการไป
+      }
+      </script>
+
+      <button id="MeasurementlogButton" class="custom-button" onclick="navigateToMeasurementlog()">Measurement log</button>
+      <script>
+        function navigateToMeasurementlog() {
+        window.location.href = '/MuMu/M1measurement.html'; // กำหนด URL ที่ต้องการไป
+      }
+      </script>
+      
+
+      
+    <button id="logoutButton">Logout</button>
+    <script>
+        // ดึงอ้างอิงไปยังปุ่ม Logout
+        const logoutButton = document.getElementById('logoutButton');
+
+        // เพิ่มการจัดการเหตุการณ์คลิกในปุ่ม Logout
+        logoutButton.addEventListener('click', () => {
+            // นำผู้ใช้กลับไปยังหน้า index.html
+            window.location.href = './Newindex.html';
+        });
+    </script>
+
+
+
+
+
+        <style>    
+            body {
+                /*  background-color: rgb(0, 0, 0);
+                 background: linear-gradient(10deg, #3f3f3f, #000000);*/
+                  height: 5px; /* สูงของแถบข้างบน */
+                 background-color: rgb(0, 0, 0); /* สีของแถบข้างบน */
+             }
+             
+             body::before {
+                 content: "";
+                 display: block;
+                 height: 20px; /* สูงของแถบข้างบน */
+                 background-color: white; /* สีของแถบข้างบน */
+                 margin: -25px 0 -25px -25px; /* ลดขนาดแถบให้เข้ากับ padding และลดด้านขวา */
+                 border: 15px solid white; /* ขอบสีขาว */
+             }
+             
+             
+             img {
+                 width: 70px;   /* กว้าง */
+                 height: 20px;   /* สูง */
+                 margin-left: 10px; /* ระยะห่างด้านซ้ายของรูปภาพ */
+                 
+                 
+             }
+             
+             h1 {
+                 color: #ffffff;
+                 padding: 14px 16px;
+                 border: 2px solid #575757; /*สีของกรอบ Home */
+                 padding: 10px;
+                 background-color: #3c3c3c; /* สีพื้นหลังในกรอบ */
+                 position: relative;
+                 top: -20px;
+                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+                 
+             } 
+             
+             .info-box {
+                 background-color: #f0f0f0;
+                 border: 1px solid #ccc;
+                 padding: 35px;
+                 width: 808px;
+                 margin: 0 auto;
+                 text-align: center;
+                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                 font-size: 56px; /* ก่อนหน้านี้ 64px */
+             
+                 margin: -42px auto 0 auto; /* ปรับ margin-top เพื่อเลื่อนขึ้นบน */
+             
+                 width: 810px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height: 80px; /* ปรับความยาวตามที่คุณต้องการ */
+             
+             }
+             
+             /* ปรับขนาด */
+             button {
+                 padding: 10px 20px;
+                 font-size: 24px; /* ขนาดตัวอักษร */
+             }
+             
+             /* ปรับสี */
+             button {
+                 background-color: #5d5c5c; /* สีพื้นหลังปุ่ม */
+                 color: #ffffff; /* สีของตัวอักษรบนปุ่ม */
+                 width: 180px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height: 80px; /* ปรับความยาวตามที่คุณต้องการ */
+             
+             
+                 margin-left: -10px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: -10px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+             
+                 border-radius: 20px; /* ปรับมุมของปุ่ม */
+             }
+             
+             /* เคลื่อนย้ายปุ่ม */
+             button {
+                 position: absolute; /* ใช้เพื่อเปลี่ยนการจัดวาง */
+                 top: 650px; /* ระยะห่างด้านบน */
+                 left: 1350px; /* ระยะห่างด้านซ้าย */
+             }
+             /* เมื่อโฮเวอร์ปุ่ม (hover) */
+             button:hover {
+                 background-color: #393939; /* สีเมื่อโฮเวอร์ปุ่ม */
+                 color: #ff9100; /* สีของตัวอักษรเมื่อโฮเวอร์ปุ่ม */
+             }
+             
+             
+             #logoutButton {
+                 width: 180px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height:80px; /* ปรับความยาวตามที่คุณต้องการ */
+                 position: absolute; /* หรือใช้ relative ตามที่ต้องการ */
+                 top: 10px; /* ปรับตำแหน่งด้านบนตามต้องการ */
+                 right: 10px; /* ปรับตำแหน่งด้านขวาตามต้องการ */
+             
+                 margin-left: -20px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: 630px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+             
+                 border-radius: 20px; /* ปรับมุมของปุ่ม */
+             
+                 background-color: #5d5c5c; /* สีพื้นหลัง */
+                 color: #ffffff; /* สีของตัวอักษร */
+             }
+             #logoutButton:hover {
+                 background-color: rgb(61, 61, 61); /* สีเมื่อโฮเวอร์ที่ปุ่ม */
+                 color: #ff9100; /* สีของตัวอักษรเมื่อโฮเวอร์ปุ่ม */
+             } 
+             
+             
+             
+             #runButton {
+                 width: 230px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height:200px; /* ปรับความยาวตามที่คุณต้องการ */
+                 margin: 10px; /* ระยะห่างระหว่างปุ่ม *//* สไตล์เฉพาะสำหรับปุ่มที่มี id เป็น runButton */
+                 /* คุณสามารถเพิ่มสไตล์เฉพาะตามต้องการ */
+                 margin-left: -1320px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: -380px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+                 background-color: #197e56; /* สีพื้นหลัง */
+                 color: #ffffff; /* สีของตัวอักษร */
+                 font-size: 48px;
+                 border-radius: 20px; /* ปรับมุมของปุ่ม */
+                 text-shadow: 2px 2px 4px rgba(48, 48, 48, 0.197); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+             
+                 border: 0px solid #197e56; /* สีขอบและขนาดขอบของปุ่ม */
+                
+             }
+             #runButton:hover {
+                 background-color: rgb(30, 70, 54); /* สีเมื่อโฮเวอร์ที่ปุ่ม */
+                 color: #1eff7c; /* สีของตัวอักษรเมื่อโฮเวอร์ปุ่ม */
+             } 
+             
+             
+             #stopButton {
+                 width: 230px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height: 200px; /* ปรับความยาวตามที่คุณต้องการ */
+                 margin: 10px; /* ระยะห่างระหว่างปุ่ม *//* สไตล์เฉพาะสำหรับปุ่มที่มี id เป็น runButton */
+                 /* คุณสามารถเพิ่มสไตล์เฉพาะตามต้องการ */
+                 margin-left: -1060px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: -380px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+                 background-color: #6e0505; /* สีพื้นหลัง */
+                 color: #ffffff; /* สีของตัวอักษร */
+                 font-size: 48px;
+                 border-radius: 20px; /* ปรับมุมของปุ่ม */
+                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+             
+                 border: 0px solid #6e0505; /* สีขอบและขนาดขอบของปุ่ม */
+               
+             }
+             #stopButton:hover {
+                 background-color: #420404; /* สีเมื่อโฮเวอร์ที่ปุ่ม */
+                 color: #ff2c2c; /* สีของตัวอักษรเมื่อโฮเวอร์ปุ่ม */
+             } 
+             #manualButton {
+                 width: 490px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height: 180px; /* ปรับความยาวตามที่คุณต้องการ */
+                 margin: 10px; /* ระยะห่างระหว่างปุ่ม *//* สไตล์เฉพาะสำหรับปุ่มที่มี id เป็น runButton */
+                 /* คุณสามารถเพิ่มสไตล์เฉพาะตามต้องการ */
+                 margin-left: -1320px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: -150px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+                 background-color: #3061b6; /* สีพื้นหลัง */
+                 color: #ffffff; /* สีของตัวอักษร */
+                 font-size: 38px;
+                 border-radius: 10px; /* ปรับมุมของปุ่ม */
+                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+             
+                 border: 2px solid #3061b6; /* สีขอบและขนาดขอบของปุ่ม */
+                
+             }
+             #manualButton:hover {
+                 background-color: #0b4275; /* สีเมื่อโฮเวอร์ที่ปุ่ม */
+                 color: #63b3ff; /* สีของตัวอักษรเมื่อโฮเวอร์ปุ่ม */
+             } 
+             
+             #SelectButton {
+                 width: 320px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height: 150px; /* ปรับความยาวตามที่คุณต้องการ */
+                 margin: 10px; /* ระยะห่างระหว่างปุ่ม *//* สไตล์เฉพาะสำหรับปุ่มที่มี id เป็น runButton */
+                 /* คุณสามารถเพิ่มสไตล์เฉพาะตามต้องการ */
+                 margin-left: -1342px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: -557px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+                 background-color: #575757 ; /* สีพื้นหลัง */    
+                 font-size: 40px;
+                 border-radius: 0px; /* ปรับมุมของปุ่ม */
+                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+             
+                /* background: linear-gradient(45deg, #737373, #737373); /* สีแบบไล่เฟด */
+                 color: #ffaa00; /* สีข้อความ */
+             
+                 border: 0px solid #575757; /* สีขอบและขนาดขอบของปุ่ม */
+                
+             }
+             #SelectButton:hover {
+                 background-color: #444444; /* สีเมื่อโฮเวอร์ที่ปุ่ม */
+              /*  background: linear-gradient(45deg, #737373, #737373); /* สีแบบไล่เฟดเมื่อนำเมาส์ไปชี้ */
+                 color: #ffaa00; /* สีข้อความเมื่อนำเมาส์ไปชี้ */
+             } 
+             
+             #ConditionButton {
+                 width: 320px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height: 150px; /* ปรับความยาวตามที่คุณต้องการ */
+                 margin: 10px; /* ระยะห่างระหว่างปุ่ม *//* สไตล์เฉพาะสำหรับปุ่มที่มี id เป็น runButton */
+                 /* คุณสามารถเพิ่มสไตล์เฉพาะตามต้องการ */
+                 margin-left: -142px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: -557px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+                 background-color: #575757; /* สีพื้นหลัง */
+                 color: #ffaa00; /* สีของตัวอักษร */
+                 font-size: 40px;
+                 border-radius: 0px; /* ปรับมุมของปุ่ม */
+                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+             
+                 border: 0px solid #575757; /* สีขอบและขนาดขอบของปุ่ม */
+                
+             }
+             #ConditionButton:hover {
+                 background-color: #444444; /* สีเมื่อโฮเวอร์ที่ปุ่ม */
+                 
+                 color: #ffaa00; /* สีข้อความเมื่อนำเมาส์ไปชี้ */
+             } 
+             
+             #EditButton {
+                 width: 970px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height: 160px; /* ปรับความยาวตามที่คุณต้องการ */
+                 margin: 10px; /* ระยะห่างระหว่างปุ่ม *//* สไตล์เฉพาะสำหรับปุ่มที่มี id เป็น runButton */
+                 /* คุณสามารถเพิ่มสไตล์เฉพาะตามต้องการ */
+                 margin-left: -795px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: -185px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+                 background-color: #575757; /* สีพื้นหลัง */
+                 font-size: 40px;
+                 border-radius: 10px; /* ปรับมุมของปุ่ม */
+                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+             
+                  /* background: linear-gradient(45deg, #737373, #737373); /* สีแบบไล่เฟด */
+                  color: #ffaa00; /* สีข้อความ */
+             
+                  border: 0px solid #575757; /* สีขอบและขนาดขอบของปุ่ม */
+                
+             }
+             #EditButton:hover {
+                 background-color: #444444; /* สีเมื่อโฮเวอร์ที่ปุ่ม */
+                 /*  background: linear-gradient(45deg, #737373, #737373); /* สีแบบไล่เฟดเมื่อนำเมาส์ไปชี้ */
+                    color: #ffaa00; /* สีข้อความเมื่อนำเมาส์ไปชี้ */
+             } 
+             
+             #worklog1Button {
+                 width: 470px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height: 180px; /* ปรับความยาวตามที่คุณต้องการ */
+                 margin: 10px; /* ระยะห่างระหว่างปุ่ม *//* สไตล์เฉพาะสำหรับปุ่มที่มี id เป็น runButton */
+                 /* คุณสามารถเพิ่มสไตล์เฉพาะตามต้องการ */
+                 margin-left: -795px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: -380px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+                 background-color: #575757; /* สีพื้นหลัง */
+                 font-size: 40px;
+                 border-radius: 10px; /* ปรับมุมของปุ่ม */
+                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+             
+                  /* background: linear-gradient(45deg, #737373, #737373); /* สีแบบไล่เฟด */
+                  color: #ffaa00; /* สีข้อความ */
+             
+                  border: 0px solid #575757; /* สีขอบและขนาดขอบของปุ่ม */
+                
+             }
+             #worklog1Button:hover {
+                 background-color: #444444; /* สีเมื่อโฮเวอร์ที่ปุ่ม */
+                 /*  background: linear-gradient(45deg, #737373, #737373); /* สีแบบไล่เฟดเมื่อนำเมาส์ไปชี้ */
+                    color: #ffaa00; /* สีข้อความเมื่อนำเมาส์ไปชี้ */
+             } 
+             
+             #MeasurementlogButton {
+                 width: 488px; /* ปรับความกว้างตามที่คุณต้องการ */
+                 height: 180px; /* ปรับความยาวตามที่คุณต้องการ */
+                 margin: 10px; /* ระยะห่างระหว่างปุ่ม *//* สไตล์เฉพาะสำหรับปุ่มที่มี id เป็น runButton */
+                 /* คุณสามารถเพิ่มสไตล์เฉพาะตามต้องการ */
+                 margin-left: -312px; /* เคลื่อนปุ่มไปทางขวา */
+                 margin-top: -380px; /* เคลื่อนปุ่มขึ้นขึ้นด้านบน */
+                 background-color: #575757; /* สีพื้นหลัง */
+                 font-size: 40px;
+                 border-radius: 10px; /* ปรับมุมของปุ่ม */
+                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* สร้างเงา 2px ขนาด และให้สีเงาเป็นสีดำโปร่ง */
+             
+                  /* background: linear-gradient(45deg, #737373, #737373); /* สีแบบไล่เฟด */
+                  color: #ffaa00; /* สีข้อความ */
+             
+                  border: 0px solid #575757; /* สีขอบและขนาดขอบของปุ่ม */
+                
+                
+             }
+             #MeasurementlogButton:hover {
+                 background-color: #444444; /* สีเมื่อโฮเวอร์ที่ปุ่ม */
+                 /*  background: linear-gradient(45deg, #737373, #737373); /* สีแบบไล่เฟดเมื่อนำเมาส์ไปชี้ */
+                    color: #ffaa00; /* สีข้อความเมื่อนำเมาส์ไปชี้ */
+             } 
+             
+        </style>       
     </div>
 </body>
-
 </html>
