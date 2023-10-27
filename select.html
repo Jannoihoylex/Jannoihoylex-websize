@@ -23,12 +23,11 @@
         </table>
     </div>
         <script>
-          fetch('http://localhost:8080/data')
+          fetch('/data')
           .then(response => response.json())
           .then(data => {
-            // ทำอะไรกับข้อมูลที่คุณได้รับ เช่นแสดงบนหน้าเว็บ
             const dataBody = document.getElementById('data-body');
-        
+            
             // สร้างแถว
             const selectmodeRow = document.createElement('tr');
         
@@ -37,8 +36,8 @@
             const selectmodeNameModuleCell = document.createElement('td');
         
             // กำหนดข้อมูลลงในเซล
-            selectmodeNumberModuleCell.textContent = data.selectmode.NumberModule; // อ้างอิงข้อมูลแบบถูกต้อง
-            selectmodeNameModuleCell.textContent = data.selectmode.NameModule;
+            selectmodeNumberModuleCell.textContent = data.NumberModule; // ใช้ data.NumberModule
+            selectmodeNameModuleCell.textContent = data.NameModule; // ใช้ data.NameModule
         
             // นำเซลมาแนบลงในแถว
             selectmodeRow.appendChild(selectmodeNumberModuleCell);
