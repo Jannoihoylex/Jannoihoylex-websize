@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require("mysql2");
+const cors = require('cors');
 
 const app = express();
 
@@ -159,6 +160,11 @@ app.get('/select.html', (req, res) => {
     res.sendFile(__dirname + '/select.html');
 }); 
 
+app.use(cors({
+    origin: 'https://jannoihoylex.github.io',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+}))
+
 
 
 
@@ -167,3 +173,6 @@ const port = 8080;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 }); 
+
+
+
