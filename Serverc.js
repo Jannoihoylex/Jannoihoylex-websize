@@ -165,6 +165,11 @@ app.use(cors({
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }))
 
+app.get('/data', (req, res) => {
+    // ส่งข้อมูลกลับไปให้เว็บแอปของคุณ
+    res.header('Access-Control-Allow-Origin', 'https://jannoihoylex.github.io'); // อนุญาตให้เข้าถึงข้อมูลจากเว็บไซต์ของคุณ
+    res.json({ message: 'Hello from localhost:8080' });
+});
 
 
 
