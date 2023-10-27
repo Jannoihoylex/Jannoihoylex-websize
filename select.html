@@ -23,6 +23,37 @@
         </table>
     </div>
         <script>
+          fetch('http://localhost:8080/data')
+          .then(response => response.json())
+          .then(data => {
+            // ทำอะไรกับข้อมูลที่คุณได้รับ เช่นแสดงบนหน้าเว็บ
+            const dataBody = document.getElementById('data-body');
+        
+            // สร้างแถว
+            const selectmodeRow = document.createElement('tr');
+        
+            // สร้างเซลสำหรับแต่ละคอลัมน์ของตาราง
+            const selectmodeNumberModuleCell = document.createElement('td');
+            const selectmodeNameModuleCell = document.createElement('td');
+        
+            // กำหนดข้อมูลลงในเซล
+            selectmodeNumberModuleCell.textContent = data.selectmode.NumberModule; // อ้างอิงข้อมูลแบบถูกต้อง
+            selectmodeNameModuleCell.textContent = data.selectmode.NameModule;
+        
+            // นำเซลมาแนบลงในแถว
+            selectmodeRow.appendChild(selectmodeNumberModuleCell);
+            selectmodeRow.appendChild(selectmodeNameModuleCell);
+        
+            // นำแถวมาแนบลงในตาราง
+            dataBody.appendChild(selectmodeRow);
+          })
+          .catch(error => {
+            console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
+          });
+        
+
+        </script>
+        <!--<script>
             const dataBody = document.getElementById('data-body');
         
             fetch('/data')
@@ -44,7 +75,7 @@
                   dataBody.appendChild(selectmodeRow);
                   
               });
-        </script>
+        </script> -->
 
         <div id="myTableContainer" style="overflow: auto; height: 230px; margin-top: 80px;  margin-left: 250px; font-size: 25px;  padding: 10px; width: 700px; background-color: #f0f0f0;">
             <table>
@@ -93,7 +124,7 @@
     .then(response => response.json())
     .then(data => {
       // ทำอะไรกับข้อมูลที่คุณได้รับ เช่นแสดงบนหน้าเว็บ
-      const element = document.getElementById('data-body'); // ตั้ง ID ของ HTML element ที่จะแสดงข้อมูล
+      const element = document.getElementById('data-container'); // ตั้ง ID ของ HTML element ที่จะแสดงข้อมูล data-container
       element.textContent = JSON.stringify(data);
     })
     .catch(error => {
